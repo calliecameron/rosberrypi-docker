@@ -78,11 +78,15 @@ RUN cd ros_catkin_ws/external_src && \
     dpkg -i liblz4-1_0.0~r122-2_armhf.deb liblz4-dev_0.0~r122-2_armhf.deb
 
 
-# Pull in ROS dependencies. The last line calls sudo internally, but
-# doesn't like running as root; the pipe is a workaround.
+# Pull in ROS dependencies. The rosdep install calls sudo internally,
+# but doesn't like running as root; the seds are a workaround.
+RUN sed -i "s/%sudo   ALL=(ALL:ALL) ALL/%sudo   ALL=(ALL:ALL) NOPASSWD:ALL/g" /etc/sudoers
+
 RUN su ros -c \
     "cd ros_catkin_ws && \
-     yes pi | rosdep install --from-paths src --ignore-src --rosdistro indigo -y -r --os=debian:wheezy"
+     rosdep install --from-paths src --ignore-src --rosdistro indigo -y -r --os=debian:wheezy"
+
+RUN sed -i "s/%sudo   ALL=(ALL:ALL) NOPASSWD:ALL/%sudo   ALL=(ALL:ALL) ALL/g" /etc/sudoers
 
 
 # Main build - this takes a long time!
