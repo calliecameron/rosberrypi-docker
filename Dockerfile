@@ -79,12 +79,10 @@ RUN cd ros_catkin_ws/external_src && \
 
 
 # Pull in ROS dependencies. The last line calls sudo internally, but
-# doesn't like running as root; previous lines are a workaround.
+# doesn't like running as root; the pipe is a workaround.
 RUN su ros -c \
     "cd ros_catkin_ws && \
-     printf '#!/bin/bash\necho pi\n' > /opt/ros-build-dir/fake-askpass && \
-     export SUDO_ASKPASS='/opt/ros-build-dir/fake-askpass' && \
-     rosdep install --from-paths src --ignore-src --rosdistro indigo -y -r --os=debian:wheezy"
+     yes pi | rosdep install --from-paths src --ignore-src --rosdistro indigo -y -r --os=debian:wheezy"
 
 
 # Main build - this takes a long time!
