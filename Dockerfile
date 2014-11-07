@@ -84,7 +84,7 @@ RUN bash -c "sed -i \$'s/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:
 
 RUN su ros -c \
     "cd ros_catkin_ws && \
-     rosdep install --from-paths src --ignore-src --rosdistro indigo -y -r --os=debian:wheezy"
+     rosdep install --from-paths src --ignore-src --rosdistro indigo -y -r --os=debian:wheezy || exit 0"
 
 RUN bash -c "sed -i \$'s/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/%sudo\tALL=(ALL:ALL) ALL/g' /etc/sudoers"
 
