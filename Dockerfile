@@ -80,13 +80,13 @@ RUN cd ros_catkin_ws/external_src && \
 
 # Pull in ROS dependencies. The rosdep install calls sudo internally,
 # but doesn't like running as root; the seds are a workaround.
-RUN sed -i "s/%sudo   ALL=(ALL:ALL) ALL/%sudo   ALL=(ALL:ALL) NOPASSWD:ALL/g" /etc/sudoers
+RUN sed -i $'s/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers
 
 RUN su ros -c \
     "cd ros_catkin_ws && \
      rosdep install --from-paths src --ignore-src --rosdistro indigo -y -r --os=debian:wheezy"
 
-RUN sed -i "s/%sudo   ALL=(ALL:ALL) NOPASSWD:ALL/%sudo   ALL=(ALL:ALL) ALL/g" /etc/sudoers
+RUN sed -i $'s/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/%sudo\tALL=(ALL:ALL) ALL/g' /etc/sudoers
 
 
 # Main build - this takes a long time!
