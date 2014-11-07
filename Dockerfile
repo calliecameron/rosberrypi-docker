@@ -78,9 +78,12 @@ RUN cd ros_catkin_ws/external_src && \
     dpkg -i liblz4-1_0.0~r122-2_armhf.deb liblz4-dev_0.0~r122-2_armhf.deb
 
 
-# Pull in ROS dependencies
+# Pull in ROS dependencies. The last line calls sudo internally, but
+# doesn't like running as root; previous lines are a workaround.
 RUN su ros -c \
     "cd ros_catkin_ws && \
+     printf '#!/bin/bash\necho pi\n' > /opt/ros-build-dir/fake-askpass && \
+     export SUDO_ASKPASS='/opt/ros-build-dir/fake-askpass' && \
      rosdep install --from-paths src --ignore-src --rosdistro indigo -y -r --os=debian:wheezy"
 
 
